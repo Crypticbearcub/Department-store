@@ -6,7 +6,7 @@ TagManager:
   tags:
   - Item
   - Shelf
-  - Customer
+  - NPC
   layers:
   - Default
   - TransparentFX

@@ -1,75 +1,55 @@
-/* using UnityEngine;
-using static UnityEditor.Progress;
+using UnityEngine;
 
-public class Inventory : MonoBehaviour
+public class PlayerInventory : MonoBehaviour
 {
-    // Fixed size inventory for 3 items
-    private Inventoryslots[] items = new Inventoryslots[3];
+    private string currentItem = null;  // The item the player is holding, null means empty
 
-    // Add an item to the inventory
-    public bool Add(Inventoryslots newItem)
+    // Method to pick up an item
+    public void PickUpItem(string item)
     {
-        // Check if there's an empty slot in the inventory
-        for (int i = 0; i < items.Length; i++)
+        if (currentItem == null)
         {
-            if (items[i] == null) // Empty slot found
-            {
-                items[i] = newItem;
-                Debug.Log("Added " + newItem.itemName + " to inventory.");
-                return true;
-            }
+            currentItem = item;
+            Debug.Log("Picked up: " + item);
         }
-
-        Debug.Log("Inventory is full. Couldn't add " + newItem.itemName);
-        return false;
-    }
-
-    // Remove an item from the inventory
-    public bool Remove(Item itemToRemove)
-    {
-        for (int i = 0; i < items.Length; i++)
+        else
         {
-            if (items[i] == itemToRemove)
-            {
-                items[i] = null; // Remove the item
-                Debug.Log("Removed " + itemToRemove.itemName + " from inventory.");
-                return true;
-            }
-        }
-
-        Debug.Log("Item not found in inventory.");
-        return false;
-    }
-
-    // Check if an item exists in the inventory
-    public bool HasItem(Item item)
-    {
-        foreach (Item invItem in items)
-        {
-            if (invItem == item)
-            {
-                Debug.Log("Inventory contains: " + item.itemName);
-                return true;
-            }
-        }
-        Debug.Log(item.itemName + " not found in inventory.");
-        return false;
-    }
-
-    // Print all items in the inventory
-    public void PrintInventory()
-    {
-        Debug.Log("Inventory:");
-        for (int i = 0; i < items.Length; i++)
-        {
-            if (items[i] != null)
-            {
-                Debug.Log((i + 1) + ": " + items[i].itemName);
-            }
-            else
-            {
-                Debug.Log((i + 1) + ": Empty");
-            }
+            Debug.Log("Inventory slot is full! Cannot pick up another item.");
         }
     }
-} */
+
+    // Method to sell the item in the inventory
+    public void SellItem()
+    {
+        if (currentItem != null)
+        {
+            Debug.Log("Sold: " + currentItem);
+            currentItem = null;  // Clear the inventory slot
+        }
+        else
+        {
+            Debug.Log("No item to sell!");
+        }
+    }
+
+    // Method to place the item on a shelf
+    public void PlaceOnShelf(StockShelf shelf)
+    {
+        if (currentItem != null)
+        {
+            shelf.AddItemToShelf(currentItem);
+            Debug.Log("Placed " + currentItem + " on the shelf.");
+            currentItem = null;  // Clear the inventory slot after placing item on the shelf
+        }
+        else
+        {
+            Debug.Log("No item to place on the shelf!");
+        }
+    }
+
+    // Check if inventory slot is free
+    public bool IsSlotFree()
+    {
+        return currentItem == null;
+    }
+}
